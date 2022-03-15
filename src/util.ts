@@ -1,6 +1,13 @@
-export const converInAbsoluteNumber = (num: number): number => Math.abs(num);
-import { Point, Station, StationSpeed, DistanceSpeed, FnCalculateDeviceDistance } from './datatype';
+import { Point, Station, StationSpeed, DistanceSpeed } from './datatype';
 
+//absolute function convert the minus in positive -6 => 6
+const converInAbsoluteNumber = (num: number): number => Math.abs(num);
+
+/*find the distance between two point distance
+ a = x1 - x2;
+ b = y1 - y2;
+ distance = Math.sqrt( a*a + b*b );
+*/
 const calculateDistance = (point1: Point, point2: Point): number => {
 	const pointDiff: Point = {
 		x: converInAbsoluteNumber(point1.x - point2.x),
@@ -9,10 +16,13 @@ const calculateDistance = (point1: Point, point2: Point): number => {
 	return Math.sqrt(pointDiff.x * pointDiff.x + pointDiff.y * pointDiff.y);
 };
 
+/*find the speeed
+  speed = (reach - distance)^2
+*/
 const calculateSpeed = (reach: number, distanceFromStation: number): number => {
 	return Math.pow(reach - distanceFromStation, 2);
 };
-
+//calculate the device distance from station
 const calculateSpeedFromTower = (station: Station, devicePointObj: Point): DistanceSpeed => {
 	const stationPoint: Point = station;
 	const distance = calculateDistance(stationPoint, devicePointObj);
@@ -20,7 +30,7 @@ const calculateSpeedFromTower = (station: Station, devicePointObj: Point): Dista
 	const distanceSpeed: DistanceSpeed = { distance, speed };
 	return distanceSpeed;
 };
-
+//show the result of the device point
 export const showBestNetworkInfo = (deviceNetworkInfo: StationSpeed) => {
 	const result: string =
 		deviceNetworkInfo.speed > 0
@@ -33,10 +43,10 @@ export const showBestNetworkInfo = (deviceNetworkInfo: StationSpeed) => {
 	console.log(result);
 	return result;
 };
-
+//calculate the device distance from all station and find nearest station
 export const calculateDeviceDistance = (deviceX: number, deviceY: number) => {
 	const devicePoint: Point = { x: deviceX, y: deviceY };
-
+	//the initial value which we use in reducer
 	const initialValue = {
 		station: { x: 0, y: 0, reach: 0 },
 		speed: 0,
@@ -54,7 +64,6 @@ export const calculateDeviceDistance = (deviceX: number, deviceY: number) => {
 
 	const maxStationSpeed = stations
 		.map((station: Station) => {
-			const stationPoint: Point = station;
 			const speedAndDistance: DistanceSpeed = calculateSpeedFromTower(station, devicePoint);
 			const stationSpeed: StationSpeed = {
 				station,
@@ -65,6 +74,7 @@ export const calculateDeviceDistance = (deviceX: number, deviceY: number) => {
 			return stationSpeed;
 		})
 		.reduce((acc: StationSpeed, current: StationSpeed) => {
+			//rewrite the device point in acc because it's possibilites, it have initial device point value
 			const devicePointInfo = { ...acc, devicePoint: current.devicePoint };
 			return current.speed > acc.speed ? current : devicePointInfo;
 		}, initialValue);

@@ -1,5 +1,8 @@
 # nord-cloud-assignment
-This repository is assignment for the Nord cloud    
+This repository is assignment for the software house    
+
+for out showing <br />
+![Screenshot](https://github.com/jawadpak/nord-cloud-assignment/blob/main/img/assignment.png) 
 
 first install the dependencies "npm install"<br />
 for run the application use "npm run start"<br />

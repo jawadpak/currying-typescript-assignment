@@ -1,4 +1,4 @@
-# nord-cloud-assignment
+# software-house-assignment
 This repository is assignment for the software house    
 
 for out showing <br />
